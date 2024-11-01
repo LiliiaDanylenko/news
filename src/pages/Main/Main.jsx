@@ -1,20 +1,25 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import { getCategories, getNews } from '../../api/apiNews';
-import NewsBanner from '../../components/NewsBanner/NewsBanner'
+import NewsBanner from '../../components/NewsBanner/NewsBanner';
 import NewsList from '../../components/NewsList/NewsList';
 import Skeleton from '../../components/Skeleton/Skeleton';
 import Pagination from '../../components/Pagination/Pagination';
 import Categories from '../../components/Categories/Categories';
-import s from './Main.module.css'
+import Search from '../../components/Search/Search';
+import { useDebounce } from '../../helpers/hooks/useDebounce';
+import s from './Main.module.css';
 
 const Main = () => {
   const [news, setNews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [keywords, setKeywords] = useState('');
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const totalPages = 10;
   const pageSize = 10;
+
+  const debouncedKeywords = useDebounce(keywords, 1500);
 
   const fetchNews = async (currentPage, selectedCategory) => {
     try {
@@ -22,7 +27,8 @@ const Main = () => {
       const response = await getNews({
         page_number: currentPage,
         page_size: pageSize,
-        category: selectedCategory === 'All' ? null : selectedCategory
+        category: selectedCategory === 'All' ? null : selectedCategory,
+        ...(debouncedKeywords && { keywords: debouncedKeywords }),
       });
       setNews(response.news);
     } catch (error) {
@@ -31,7 +37,7 @@ const Main = () => {
       setIsLoading(false);
     }
   };
-  
+
   const fetchCategories = async () => {
     try {
       const response = await getCategories();
@@ -43,28 +49,27 @@ const Main = () => {
 
   useEffect(() => {
     fetchCategories();
-  }, [])
-  
+  }, []);
 
   useEffect(() => {
     fetchNews(currentPage, selectedCategory);
-  }, [currentPage, selectedCategory]);
+  }, [currentPage, selectedCategory, debouncedKeywords]);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
-      setCurrentPage(current => current + 1);
+      setCurrentPage((current) => current + 1);
     }
-  }
+  };
 
   const handlePrevPage = () => {
     if (currentPage > 1) {
-      setCurrentPage(current => current - 1);
+      setCurrentPage((current) => current - 1);
     }
-  }
+  };
 
   const handleChangePage = (pageNumber) => {
     setCurrentPage(pageNumber);
-  }
+  };
 
   return (
     <main className={s.main}>
@@ -73,6 +78,8 @@ const Main = () => {
         selectedCategory={selectedCategory}
         setSelectedCategory={setSelectedCategory}
       />
+
+      <Search keywords={keywords} setKeywords={setKeywords} />
 
       {news.length > 0 && !isLoading ? (
         <NewsBanner item={news[0]} />
@@ -102,7 +109,7 @@ const Main = () => {
         handleChangePage={handleChangePage}
       />
     </main>
-  )
-}
+  );
+};
 
-export default Main
+export default Main;
