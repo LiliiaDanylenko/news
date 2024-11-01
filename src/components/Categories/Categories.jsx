@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import s from './Categories.module.css'
+import s from './Categories.module.css';
 
 const Categories = ({ categories, selectedCategory, setSelectedCategory }) => {
   const containerRef = useRef(null);
@@ -34,7 +34,13 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory }) => {
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
     >
-      {categories.map(category => (
+      <button
+        className={!selectedCategory ? s.active : s.item}
+        onClick={() => setSelectedCategory(null)}
+      >
+        All
+      </button>
+      {categories.map((category) => (
         <button
           key={category}
           className={category === selectedCategory ? s.active : s.item}
@@ -44,7 +50,7 @@ const Categories = ({ categories, selectedCategory, setSelectedCategory }) => {
         </button>
       ))}
     </div>
-  )
-}
+  );
+};
 
-export default Categories
+export default Categories;
