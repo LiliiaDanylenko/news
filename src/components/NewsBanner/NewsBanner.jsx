@@ -1,6 +1,7 @@
-import { formatTimeAgo } from '../../helpers/formatTimeAgo'
-import Image from '../Image/Image'
-import s from './NewsBanner.module.css'
+import { formatTimeAgo } from '../../helpers/formatTimeAgo';
+import withSkeleton from '../../helpers/hocs/withSkeleton';
+import Image from '../Image/Image';
+import s from './NewsBanner.module.css';
 
 const NewsBanner = ({ item }) => {
   return (
@@ -11,7 +12,9 @@ const NewsBanner = ({ item }) => {
         {formatTimeAgo(item.published)} by {item.author}
       </p>
     </div>
-  )
-}
+  );
+};
 
-export default NewsBanner
+const NewsBannerWithSkeleton = withSkeleton(NewsBanner, 'banner', 1);
+
+export default NewsBannerWithSkeleton;
