@@ -1,14 +1,18 @@
-import { forwardRef } from 'react';
+import { ForwardedRef, forwardRef } from 'react';
 import s from './Categories.module.css';
+import { CategoryType } from '../../interfaces';
+
+interface Props {
+  categories: CategoryType[];
+  selectedCategory: CategoryType | null;
+  setSelectedCategory: (category: CategoryType | null) => void;
+}
 
 const Categories = forwardRef(
-  ({ categories, selectedCategory, setSelectedCategory }, ref) => {
+  ({ categories, selectedCategory, setSelectedCategory }: Props, ref: ForwardedRef<HTMLDivElement>) => {
     return (
       <div ref={ref} className={s.categories}>
-        <button
-          className={!selectedCategory ? s.active : s.item}
-          onClick={() => setSelectedCategory(null)}
-        >
+        <button className={!selectedCategory ? s.active : s.item} onClick={() => setSelectedCategory(null)}>
           All
         </button>
         {categories.map((category) => (

@@ -1,8 +1,13 @@
 import { formatTimeAgo } from '../../helpers/formatTimeAgo';
+import { INews } from '../../interfaces';
 import Image from '../Image/Image';
 import s from './NewsBanner.module.css';
 
-const NewsBanner = ({ item }) => {
+interface Props {
+  item: INews;
+}
+
+const NewsBanner = ({ item }: Props) => {
   return (
     <li className={s.banner}>
       <Image image={item?.image} />
