@@ -1,13 +1,16 @@
+import { IPaginationProps } from '../../interfaces';
 import s from './Pagination.module.css'
 
-const Pagination = ({ currentPage, totalPages, handleNextPage, handlePrevPage, handleChangePage }) => {
+const Pagination = ({
+  currentPage,
+  totalPages,
+  handleNextPage,
+  handlePrevPage,
+  handleChangePage,
+}: IPaginationProps) => {
   return (
     <div className={s.pagination}>
-      <button
-        className={s.arrow}
-        onClick={handlePrevPage}
-        disabled={currentPage <= 1}
-      >
+      <button className={s.arrow} onClick={handlePrevPage} disabled={currentPage <= 1}>
         {'<'}
       </button>
       <div className={s.list}>
@@ -22,15 +25,11 @@ const Pagination = ({ currentPage, totalPages, handleNextPage, handlePrevPage, h
           </button>
         ))}
       </div>
-      <button
-        className={s.arrow}
-        onClick={handleNextPage}
-        disabled={currentPage >= 10}
-      >
+      <button className={s.arrow} onClick={handleNextPage} disabled={currentPage >= 10}>
         {'>'}
       </button>
     </div>
-  )
-}
+  );
+};
 
 export default Pagination
